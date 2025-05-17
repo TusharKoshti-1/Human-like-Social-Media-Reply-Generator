@@ -6,11 +6,21 @@ load_dotenv()
 
 # MongoDB setup
 MONGODB_URI = os.getenv("MONGODB_URI")
-client = MongoClient(MONGODB_URI)
-db = client["social_media_replies"]
-collection = db["replies"]
+if not MONGODB_URI:
+    raise ValueError("MONGODB_URI is missing in .env file")
+if not (MONGODB_URI.startswith("mongodb://") or MONGODB_URI.startswith("mongodb+srv://")):
+    raise ValueError(f"Invalid MONGODB_URI: '{MONGODB_URI}'. Must start with 'mongodb://' or 'mongodb+srv://'")
 
-async def insert_post_reply(data: dict):
+try:
+    client = MongoClient(MONGODB_URI)
+    # Test connection
+    client.server_info()  # Forces a connection check
+    db = client["social_media_replies"]
+    collection = db["replies"]
+except Exception as e:
+    raise Exception(f"Failed to connect to MongoDB: {str(e)}")
+
+def insert_post_reply(data: dict):
     """
     Insert a post-reply pair into MongoDB.
     
@@ -18,6 +28,6 @@ async def insert_post_reply(data: dict):
         data: Dictionary containing platform, post_text, generated_reply, timestamp
     """
     try:
-        await collection.insert_one(data)
+        collection.insert_one(data)
     except Exception as e:
         raise Exception(f"Database insertion failed: {str(e)}")
