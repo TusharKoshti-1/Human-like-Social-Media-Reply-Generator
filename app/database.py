@@ -13,8 +13,7 @@ if not (MONGODB_URI.startswith("mongodb://") or MONGODB_URI.startswith("mongodb+
 
 try:
     client = MongoClient(MONGODB_URI)
-    # Test connection
-    client.server_info()  # Forces a connection check
+    client.server_info()  # Test connection
     db = client["social_media_replies"]
     collection = db["replies"]
 except Exception as e:
