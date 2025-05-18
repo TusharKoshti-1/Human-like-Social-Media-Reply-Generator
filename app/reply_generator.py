@@ -17,22 +17,26 @@ def generate_reply(platform: str, post_text: str) -> str:
     """
     tone = analyze_tone(post_text)
 
-    # Define prompt
+    # Define prompt templates
     prompt_templates = {
-        "Twitter": f"Generate a witty, friendly Twitter reply to the following post. Keep it concise (< 280 characters), match the {tone} tone, include 1-2 emojis, reference the post's content, use casual language, and add 1 hashtag. Avoid generic phrases.\n\nPost: {post_text}\n\nReply:",
-        "LinkedIn": f"Generate a supportive, professional LinkedIn reply to the following post. Be polite, match the {tone} tone, encourage networking, and avoid generic phrases.\n\nPost: {post_text}\n\nReply:",
-        "Instagram": f"Generate a friendly, casual Instagram reply to the following post. Be conversational, match the {tone} tone, include 1-2 emojis, and avoid generic phrases.\n\nPost: {post_text}\n\nReply:"
+        "Twitter": f"Generate a witty, friendly Twitter reply to the following post. Keep it concise (<280 characters), match the {tone} tone, include 1-2 emojis, reference the post's content, use casual language, and add 1 hashtag. Avoid generic phrases.\n\nPost: {post_text}\n\nReply:",
+        "LinkedIn": f"Generate a supportive, professional LinkedIn reply to the following post. Be polite, match the {tone} tone, encourage networking, and avoid generic phrases. Use professional language.\n\nPost: {post_text}\n\nReply:",
+        "Instagram": f"Generate a friendly, casual Instagram reply to the following post. Be conversational, match the {tone} tone, include 1-2 emojis, and avoid generic phrases. Keep it fun and real.\n\nPost: {post_text}\n\nReply:",
+        "Facebook": f"Generate a warm, community-style Facebook comment for the following post. Match the {tone} tone, use a few emojis if suitable, and respond in a friendly tone. Reference the content of the post directly.\n\nPost: {post_text}\n\nReply:",
+        "Reddit": f"Generate a thoughtful, concise Reddit comment for this post. Match the {tone} tone and be relevant to the subreddit culture. Avoid fluff. Include subtle humor if applicable.\n\nPost: {post_text}\n\nComment:",
+        "YouTube": f"Write a short YouTube comment matching the {tone} tone. Be engaging and relevant to the video's content. Add a light emoji if suitable. Avoid spammy vibes.\n\nPost: {post_text}\n\nComment:",
+        "Threads": f"Generate a conversational Threads (Meta) reply to the following post. Match the {tone} tone, use casual and trendy language, include 1 emoji, and avoid clichés.\n\nPost: {post_text}\n\nReply:",
+        "TikTok": f"Write a fun and relatable TikTok comment. Match the {tone} tone. Keep it short, casual, and engaging with 1-2 emojis or slang. Avoid generic praise.\n\nPost: {post_text}\n\nComment:"
     }
 
     prompt = prompt_templates.get(platform)
     if not prompt:
         raise ValueError(f"Unsupported platform: {platform}")
 
-    # Send request to Groq
     try:
         url = "https://api.groq.com/openai/v1/chat/completions"
         headers = {
-            "Authorization": f"Bearer {os.getenv('GROQ_API_KEY')}",  # Make sure this is set
+            "Authorization": f"Bearer {os.getenv('GROQ_API_KEY')}",
             "Content-Type": "application/json"
         }
         payload = {

@@ -8,8 +8,6 @@ load_dotenv()
 MONGODB_URI = os.getenv("MONGODB_URI")
 if not MONGODB_URI:
     raise ValueError("MONGODB_URI is missing in .env file")
-if not (MONGODB_URI.startswith("mongodb://") or MONGODB_URI.startswith("mongodb+srv://")):
-    raise ValueError(f"Invalid MONGODB_URI: '{MONGODB_URI}'. Must start with 'mongodb://' or 'mongodb+srv://'")
 
 try:
     client = MongoClient(MONGODB_URI)

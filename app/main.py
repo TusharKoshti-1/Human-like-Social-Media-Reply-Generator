@@ -33,3 +33,4 @@ async def generate_reply_endpoint(post: PostRequest):
         return inserted_doc or data
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to generate reply: {str(e)}")
+    
