@@ -3,6 +3,7 @@ from app.models import PostRequest
 from app.reply_generator import generate_reply
 from app.database import insert_post_reply, collection
 from datetime import datetime
+import os
 
 
 app = FastAPI()
@@ -34,3 +35,6 @@ async def generate_reply_endpoint(post: PostRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to generate reply: {str(e)}")
     
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
